@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🔱 Trishul Pro — Signal</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--gold:#f5c518;--bg:#000;--bg2:#0a0a0a;--bg3:#121212;--border:#222;--bordergold:#3d3000;--text:#eee;--dim:#888;--green:#00c853;--red:#ff3d3d;--orange:#ff6d00;}
+html,body{height:100%;background:#000;overflow:hidden;}
+.wrap{width:100%;max-width:430px;height:100vh;height:100dvh;margin:0 auto;display:flex;flex-direction:column;border:2px solid var(--gold);background:#000;}
+.topbar{flex-shrink:0;background:#0a0a0a;border-bottom:2px solid var(--gold);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;}
+.tb-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:var(--gold);letter-spacing:1.5px;}
+.gdot{width:6px;height:6px;background:#00c853;border-radius:50%;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+/* SCANNER GRID */
+.sc-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);border:2px solid var(--gold);margin:4px;overflow:hidden;}
+.sc-box{background:#000;border:1px solid #1e1a00;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;padding:4px;}
+.sc-box:active{background:#0d0d00;}
+.sc-ico{font-size:24px;filter:drop-shadow(0 0 6px rgba(245,197,24,0.5));}
+.sc-tag{font-size:7px;font-weight:700;color:var(--gold);letter-spacing:1.5px;opacity:0.8;font-family:'Rajdhani',sans-serif;}
+.sc-nm{font-size:11px;font-weight:700;color:#eee;text-align:center;line-height:1.2;font-family:'Rajdhani',sans-serif;}
+.sc-live{display:flex;align-items:center;gap:3px;font-size:8px;color:var(--dim);font-family:'Rajdhani',sans-serif;}
+.ldot{width:5px;height:5px;background:#00c853;border-radius:50%;animation:blink 1.5s infinite;}
+.sc-stats{display:flex;gap:5px;font-size:9px;font-weight:700;font-family:'Rajdhani',sans-serif;}
+/* NAV */
+.bnav{flex-shrink:0;display:flex;background:#0a0a0a;border-top:2px solid var(--gold);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;padding:7px 2px 5px;gap:2px;min-height:52px;}
+.ni:active{background:#1a1600;}
+.ni-ico{font-size:18px;line-height:1;}
+.ni-lbl{font-size:8px;color:var(--dim);font-weight:700;letter-spacing:0.5px;font-family:'Rajdhani',sans-serif;}
+.ni.act .ni-lbl{color:var(--gold);}
+.ni.act .ni-ico{filter:drop-shadow(0 0 5px var(--gold));}
+/* EXIT */
+.xbtn{width:28px;height:28px;background:linear-gradient(135deg,#8b0000,#ff3d3d);border:2px solid #ff8888;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;}
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,0.93);display:none;align-items:center;justify-content:center;z-index:200;}
+.mbg.show{display:flex;}
+.mbox{background:#0a0a0a;border:2px solid var(--gold);width:calc(100% - 24px);max-width:390px;padding:14px;max-height:92vh;overflow-y:auto;scrollbar-width:none;}
+.mbox::-webkit-scrollbar{display:none;}
+.mhd{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #3d3000;margin-bottom:12px;}
+.mtitle{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--gold);display:flex;align-items:center;gap:8px;}
+.mclose{background:none;border:1px solid #222;color:#888;font-size:18px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+/* STATS GRID */
+.sg4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px;}
+.sgb{background:#121212;border:1px solid #222;padding:8px 4px;text-align:center;}
+.sg-lbl{font-size:7px;color:var(--dim);letter-spacing:1px;margin-bottom:3px;font-family:'Rajdhani',sans-serif;}
+.sg-val{font-size:20px;font-weight:800;font-family:'Orbitron',sans-serif;}
+.cy{color:var(--gold);}.cg{color:#00c853;}.cr{color:#ff3d3d;}.co{color:#ff6d00;}
+/* WIN RATIO BAR */
+.ratio-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ratio-lbl{font-size:9px;color:var(--dim);white-space:nowrap;font-family:'Rajdhani',sans-serif;}
+.rbar{flex:1;height:12px;background:#0a0a00;border:1px solid #222;overflow:hidden;}
+.rfill{height:100%;background:linear-gradient(90deg,#00c853,#00ff7a);transition:width 0.8s;}
+.rpct{font-size:13px;font-weight:800;color:#00c853;font-family:'Orbitron',sans-serif;}
+/* BUY/SELL BOX */
+.bs-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.bsbox{border:1px solid;padding:12px;text-align:center;}
+.bsbox.buy{border-color:#004a20;background:#001a0a;}
+.bsbox.sell{border-color:#4a0000;background:#1a0000;}
+.bs-lbl{font-size:9px;letter-spacing:2px;margin-bottom:5px;font-family:'Rajdhani',sans-serif;}
+.bsbox.buy .bs-lbl{color:#00c853;}.bsbox.sell .bs-lbl{color:#ff3d3d;}
+.bs-num{font-size:28px;font-weight:800;font-family:'Orbitron',sans-serif;}
+.bsbox.buy .bs-num{color:#00c853;}.bsbox.sell .bs-num{color:#ff3d3d;}
+/* TRADE TABLE */
+.sec-ttl{font-size:9px;color:var(--dim);letter-spacing:2px;margin-bottom:6px;font-family:'Rajdhani',sans-serif;}
+.trade-table{width:100%;border-collapse:collapse;}
+.trade-table th{font-size:8px;color:var(--gold);letter-spacing:1px;padding:5px 4px;border-bottom:1px solid #3d3000;text-align:left;font-family:'Rajdhani',sans-serif;}
+.trade-table td{font-size:10px;padding:7px 4px;border-bottom:1px solid #111;font-family:'Rajdhani',sans-serif;}
+.trade-table tr:last-child td{border-bottom:none;}
+.t-win{color:#00c853;font-weight:700;}
+.t-sl{color:#ff3d3d;font-weight:700;}
+.t-pend{color:#ff6d00;font-weight:700;}
+/* PNL ROW */
+.pnl-box{background:#001a0a;border:1px solid #004a20;padding:12px;text-align:center;margin-top:10px;}
+.pnl-lbl{font-size:9px;color:#00c853;letter-spacing:2px;font-family:'Rajdhani',sans-serif;}
+.pnl-val{font-size:22px;font-weight:900;color:#00c853;font-family:'Orbitron',sans-serif;margin-top:4px;}
+/* CRITERIA */
+.crit-list{display:flex;flex-direction:column;gap:4px;margin-top:10px;}
+.crit-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#0a0a00;border:1px solid #2a2400;}
+.crit-nm{font-size:11px;font-weight:700;font-family:'Rajdhani',sans-serif;}
+.crit-ok{font-size:10px;font-weight:800;color:#00c853;font-family:'Rajdhani',sans-serif;}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#121212;border:1px solid #3d3000;padding:8px 16px;font-size:11px;color:#eee;z-index:999;display:none;white-space:nowrap;font-family:'Rajdhani',sans-serif;}
+.toast.show{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="tb-title">🔱 SCANNER MASTER</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:4px;font-size:8px;color:var(--dim);font-family:'Rajdhani',sans-serif"><div class="gdot"></div>AI ACTIVE</div>
+      <div class="xbtn" onclick="doLogout()">⏻</div>
+    </div>
+  </div>
+  <div class="sc-grid" id="scGrid"></div>
+  <nav class="bnav">
+    <a class="ni" href="page2_home.html"><div class="ni-ico">🏠</div><div class="ni-lbl">HOME</div></a>
+    <a class="ni act" href="page3_signal.html"><div class="ni-ico">📡</div><div class="ni-lbl">SIGNAL</div></a>
+    <a class="ni" href="page4_power.html"><div class="ni-ico">⚡</div><div class="ni-lbl">POWER</div></a>
+    <a class="ni" href="page5_chart.html"><div class="ni-ico">📊</div><div class="ni-lbl">CHART</div></a>
+    <a class="ni" href="page6_watchlist.html"><div class="ni-ico">⭐</div><div class="ni-lbl">WATCH</div></a>
+    <a class="ni" href="page7_admin.html"><div class="ni-ico">⚙️</div><div class="ni-lbl">ADMIN</div></a>
+  </nav>
+</div>
+
+<!-- SCANNER DETAIL MODAL -->
+<div class="mbg" id="scModal" onclick="cm()">
+  <div class="mbox" onclick="event.stopPropagation()">
+    <div class="mhd">
+      <div class="mtitle"><span id="mIco">💥</span>&nbsp;<span id="mNm">BRAHMASTRA</span></div>
+      <button class="mclose" onclick="cm()">✕</button>
+    </div>
+    <div class="sg4">
+      <div class="sgb"><div class="sg-lbl">TOTAL</div><div class="sg-val cy" id="mTotal">0</div></div>
+      <div class="sgb"><div class="sg-lbl">WIN ✅</div><div class="sg-val cg" id="mWin">0</div></div>
+      <div class="sgb"><div class="sg-lbl">SL ❌</div><div class="sg-val cr" id="mSL">0</div></div>
+      <div class="sgb"><div class="sg-lbl">PEND ⏳</div><div class="sg-val co" id="mPend">0</div></div>
+    </div>
+    <div class="ratio-row">
+      <div class="ratio-lbl">WIN RATIO</div>
+      <div class="rbar"><div class="rfill" id="mRFill" style="width:0%"></div></div>
+      <div class="rpct" id="mRPct">0%</div>
+    </div>
+    <div class="bs-row">
+      <div class="bsbox buy"><div class="bs-lbl">▲ BUY SIGNALS</div><div class="bs-num" id="mBuy">0</div></div>
+      <div class="bsbox sell"><div class="bs-lbl">▼ SELL SIGNALS</div><div class="bs-num" id="mSell">0</div></div>
+    </div>
+    <div class="pnl-box">
+      <div class="pnl-lbl">💰 TODAY's NET P&L</div>
+      <div class="pnl-val" id="mPNL">+₹0</div>
+    </div>
+    <div class="sec-ttl" style="margin-top:12px">📋 TODAY's TRADES</div>
+    <table class="trade-table">
+      <thead><tr><th>STOCK</th><th>ENTRY</th><th>EXIT</th><th>P&L</th><th>STATUS</th></tr></thead>
+      <tbody id="mTrades"></tbody>
+    </table>
+    <div class="sec-ttl" style="margin-top:12px">⚙️ SCANNER CRITERIA</div>
+    <div class="crit-list" id="mCrit"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const SCANNERS=[
+  {nm:'MORNING BELL',ico:'🔔',total:14,win:11,sl:2,pend:1,buy:10,sell:4,pnl:'+₹8,450',
+   crit:['Price >500','Score 0-100','CMF > 0','OBV Rising','15m Breakout','Sector OK'],
+   trades:[{s:'HDFC BANK',e:1672,x:1695,pl:'+₹1,150',st:'WIN'},{s:'TCS',e:3880,x:3850,pl:'-₹1,500',st:'SL'},{s:'INFY',e:1885,x:1920,pl:'+₹1,750',st:'WIN'},{s:'SBI',e:785,x:810,pl:'+₹2,500',st:'WIN'}]},
+  {nm:'MAHAKAL',ico:'⚡',total:12,win:10,sl:1,pend:1,buy:9,sell:3,pnl:'+₹12,800',
+   crit:['Candlestick Pattern','Chart Pattern','Trendline Break','S/R Zone','Fibonacci','Round Number','Risk Reward 1:2','Market Structure'],
+   trades:[{s:'RELIANCE',e:2445,x:2490,pl:'+₹2,250',st:'WIN'},{s:'M&M',e:2340,x:2310,pl:'-₹1,500',st:'SL'},{s:'AXIS BANK',e:1118,x:1145,pl:'+₹1,350',st:'WIN'}]},
+  {nm:'BHERVE',ico:'🌊',total:10,win:8,sl:2,pend:0,buy:7,sell:3,pnl:'+₹6,200',
+   crit:['Volume Profile','Smart Money','HMA Wave','Bollinger Band','Elder Impulse','Fixed Range Vol','SuperTrend'],
+   trades:[{s:'WIPRO',e:562,x:575,pl:'+₹650',st:'WIN'},{s:'KOTAK',e:1828,x:1855,pl:'+₹1,350',st:'WIN'},{s:'ITC',e:455,x:448,pl:'-₹350',st:'SL'}]},
+  {nm:'INDEX POWER',ico:'📡',total:8,win:7,sl:1,pend:0,buy:6,sell:2,pnl:'+₹15,600',
+   crit:['Intl Indices','PCR + Volume','S/R Zones','Sector Wise','Commodity','VIX Level','FII/DII Data','DXY Index'],
+   trades:[{s:'NIFTY CE',e:180,x:245,pl:'+₹6,500',st:'WIN'},{s:'BANKNIFTY PE',e:220,x:195,pl:'-₹2,500',st:'SL'},{s:'NIFTY PE',e:150,x:210,pl:'+₹6,000',st:'WIN'}]},
+  {nm:'TRISHUL',ico:'🔱',total:6,win:5,sl:1,pend:0,buy:5,sell:1,pnl:'+₹22,400',
+   crit:['US Fed Data','Global News','RBI Policy','Indian Events','Stock News','Manual Override'],
+   trades:[{s:'NIFTY CE',e:200,x:320,pl:'+₹12,000',st:'WIN'},{s:'HDFC BANK',e:1665,x:1698,pl:'+₹1,650',st:'WIN'},{s:'SBI',e:782,x:772,pl:'-₹500',st:'SL'}]},
+  {nm:'SUDARSHAN',ico:'☸️',total:16,win:13,sl:2,pend:1,buy:11,sell:5,pnl:'+₹18,750',
+   crit:['Vol+OI+PCR','Prev Day H/L','Day S/R','Horizontal S/R','Trendline','Range Breakout','Candlestick','Chart Pattern'],
+   trades:[{s:'MARUTI',e:11180,x:11260,pl:'+₹4,000',st:'WIN'},{s:'BAJAJ FIN',e:6820,x:6780,pl:'-₹2,000',st:'SL'},{s:'ASIAN PAINT',e:2228,x:2265,pl:'+₹1,850',st:'WIN'}]},
+  {nm:'BRAHMASTRA',ico:'💥',total:18,win:15,sl:2,pend:1,buy:13,sell:5,pnl:'+₹31,200',
+   crit:['Volume 25%','VWAP 20%','Pivot 18%','RSI 15%','EMA 12%','ADX 10%'],
+   trades:[{s:'RELIANCE',e:2440,x:2498,pl:'+₹2,900',st:'WIN'},{s:'TCS',e:3875,x:3940,pl:'+₹3,250',st:'WIN'},{s:'INFY',e:1882,x:1870,pl:'-₹600',st:'SL'},{s:'HDFC BANK',e:1668,x:1705,pl:'+₹1,850',st:'WIN'}]},
+  {nm:'EXPIRY SCALPER',ico:'⏱️',total:9,win:8,sl:1,pend:0,buy:7,sell:2,pnl:'+₹9,800',
+   crit:['PCR Ratio','MMI Index','Open Interest','7EMA Sync','VWAP Sync','Time Lock'],
+   trades:[{s:'NIFTY CE 24900',e:85,x:140,pl:'+₹5,500',st:'WIN'},{s:'NIFTY PE 24800',e:72,x:55,pl:'-₹1,700',st:'SL'},{s:'NIFTY CE 25000',e:45,x:88,pl:'+₹4,300',st:'WIN'}]},
+  {nm:'ALL-IN-ONE',ico:'🚐',total:7,win:6,sl:1,pend:0,buy:7,sell:0,pnl:'+₹14,500',
+   crit:['5/8 Scanner Combo','Score Meter','Power Table','Entry Signal','Target Auto','Must Buy List'],
+   trades:[{s:'HDFC BANK',e:1670,x:1698,pl:'+₹1,400',st:'WIN'},{s:'SBI',e:784,x:808,pl:'+₹2,400',st:'WIN'},{s:'RELIANCE',e:2442,x:2430,pl:'-₹600',st:'SL'}]},
+];
+
+document.getElementById('scGrid').innerHTML=SCANNERS.map((sc,i)=>`
+  <div class="sc-box" onclick="openSC(${i})">
+    <div class="sc-ico">${sc.ico}</div>
+    <div class="sc-tag">🔱 SCANNER</div>
+    <div class="sc-nm">${sc.nm}</div>
+    <div class="sc-stats">
+      <span style="color:#00c853">▲${sc.buy}</span>
+      <span style="color:#ff3d3d">▼${sc.sell}</span>
+    </div>
+    <div class="sc-live"><div class="ldot"></div><span>LIVE</span></div>
+  </div>`).join('');
+
+function openSC(i){
+  const sc=SCANNERS[i];
+  document.getElementById('mIco').textContent=sc.ico;
+  document.getElementById('mNm').textContent=sc.nm;
+  document.getElementById('mTotal').textContent=sc.total;
+  document.getElementById('mWin').textContent=sc.win;
+  document.getElementById('mSL').textContent=sc.sl;
+  document.getElementById('mPend').textContent=sc.pend;
+  document.getElementById('mBuy').textContent=sc.buy;
+  document.getElementById('mSell').textContent=sc.sell;
+  document.getElementById('mPNL').textContent=sc.pnl;
+  const r=Math.round((sc.win/sc.total)*100);
+  document.getElementById('mRFill').style.width=r+'%';
+  document.getElementById('mRPct').textContent=r+'%';
+  document.getElementById('mTrades').innerHTML=sc.trades.map(t=>`
+    <tr>
+      <td><b>${t.s}</b></td>
+      <td>₹${t.e}</td>
+      <td>₹${t.x}</td>
+      <td class="${t.st==='WIN'?'t-win':t.st==='SL'?'t-sl':'t-pend'}">${t.pl}</td>
+      <td class="${t.st==='WIN'?'t-win':t.st==='SL'?'t-sl':'t-pend'}">${t.st}</td>
+    </tr>`).join('');
+  document.getElementById('mCrit').innerHTML=sc.crit.map(c=>`
+    <div class="crit-item"><span class="crit-nm">✅ ${c}</span><span class="crit-ok">PASS</span></div>`).join('');
+  document.getElementById('scModal').classList.add('show');
+}
+function cm(){document.getElementById('scModal').classList.remove('show');}
+function doLogout(){if(confirm('Logout?'))window.location.href='index.html';}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+</script>
+</body>
+</html>
